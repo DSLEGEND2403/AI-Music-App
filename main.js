@@ -4,6 +4,9 @@ leftWristX= 0;
 leftWristY= 0;
 rightWristX= 0;
 rightWristY= 0;
+scoreLeftWrist=0;
+scorerightWrist=0;
+SWIP="";
 
 function preload()
 {
@@ -23,7 +26,21 @@ poseNet.on('pose', gotPoses);
 
 function draw()
 {
-image(video, 0, 0, 600, 500);    
+image(video, 0, 0, 600, 500);
+fill("#FF0000");
+stroke("#FF0000"); 
+Songstatus = Song1.isPlaying();
+
+if (scoreLeftWrist > 0.2)
+{
+circle(leftWristX,leftWristY,20);
+Song2.stop();  
+if (Songstatus == false)
+{
+Song1.play(); 
+document.getElementById("songname").innerHTML = "Born For this";
+}    
+}  
 }
 
 function modelLoaded()
@@ -35,7 +52,9 @@ function gotPoses(results)
 {
 if (results.length > 0)
 {
-console.log(results);  
+console.log(results);
+scorerightWrist= results[0].pose.keypoints[10].score;
+scoreLeftWrist= results[0].pose.keypoints[9].score;  
 leftWristX=results[0].pose.leftWrist.x;
 leftWristY=results[0].pose.leftWrist.y;
 console.log("leftWristX =" + leftWristX + "leftWristY =" + leftWristY);
@@ -45,5 +64,3 @@ rightWristY=results[0].pose.rightWrist.y;
 console.log("rightWristX =" + rightWristX + "rightWristY =" + rightWristY);
 }
 }
-
-
